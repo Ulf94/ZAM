@@ -1,4 +1,4 @@
-﻿namespace ZAM.Core.Application.Tahoma.QueryHandlers;
+﻿namespace ZAM.Core.Infrastructure.Tahoma.QueryHandlers;
 
 using Microsoft.Extensions.Logging;
 using ZAM.Core.Application.Tahoma.Commands;

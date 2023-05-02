@@ -13,16 +13,16 @@ internal class Program
             .AddEnvironmentVariables(prefix: "CONFIG_")
             .Build();
 
-        var logger = new LoggerConfiguration()
+        Log.Logger = new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .CreateLogger();
 
         var builder = WebApplication
             .CreateBuilder(args);
 
-        builder.Host.UseSerilog(logger);
+        builder.Host.UseSerilog(Log.Logger);
 
-        builder.Logging.AddSerilog(logger);
+        builder.Logging.AddSerilog(Log.Logger);
 
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.AddApplication();
@@ -42,7 +42,7 @@ internal class Program
 
         try
         {
-            logger.Information("Application {ApplicationName} is starting", app.Environment.ApplicationName);
+            Log.Logger.Information("Application {ApplicationName} is starting", app.Environment.ApplicationName);
 
             app.Run();
 
@@ -50,14 +50,14 @@ internal class Program
         }
         catch (Exception exception)
         {
-            logger.Error(exception, "{Message}", exception.Message);
-            logger.Information("Application {ApplicationName} occurred an error and will be shut down", app.Environment.ApplicationName);
+            Log.Logger.Fatal(exception, "{Message}", exception.Message);
+            Log.Logger.Information("Application {ApplicationName} occurred an error and will be shut down", app.Environment.ApplicationName);
 
             return 1;
         }
         finally
         {
-            logger.Information("Application {ApplicationName} is shutting down", app.Environment.ApplicationName);
+            Log.Logger.Information("Application {ApplicationName} is shutting down", app.Environment.ApplicationName);
 
             Log.CloseAndFlush();
         }

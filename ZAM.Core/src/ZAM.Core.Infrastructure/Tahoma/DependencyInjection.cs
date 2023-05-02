@@ -9,9 +9,10 @@ internal static class DependencyInjection
 {
     public static IServiceCollection AddTahoma(this IServiceCollection services, IConfiguration configuration)
     {
-        var options = configuration.GetSection("Tahoma").Get<TahomaOptions>()!;
-
-        services.AddHttpClient(TahomaOptions.SectionName);
+        services.AddHttpClient(TahomaOptions.SectionName, config =>
+        {
+            config.Timeout = TimeSpan.FromSeconds(30);
+        });
 
         services.AddMemoryCache();
 
@@ -19,11 +20,6 @@ internal static class DependencyInjection
 
         var serviceProvider = services.BuildServiceProvider();
         var tahomaService = serviceProvider.GetRequiredService<ITahomaService>();
-
-        //tahomaService.GetLoginCookie();
-        //tahomaService.GetToken();
-        //tahomaService.ActivateToken();
-        //tahomaService.GetDevices();
 
         return services;
     }

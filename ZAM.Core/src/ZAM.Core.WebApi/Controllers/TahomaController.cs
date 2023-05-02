@@ -2,8 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using ZAM.Core.Application.Tahoma.Commands;
-using ZAM.Core.Application.Tahoma.Models;
-using ZAM.Core.Application.Tahoma.Queries;
+using ZAM.Core.Application.Tahoma.ViewModels;
 
 [ApiController]
 [Route("[controller]/[action]")]
@@ -31,19 +30,9 @@ public class TahomaController : ControllerBase
         return result;
     }
 
-    [HttpPost(Name = "GetToken")]
-    public async Task<Token> GetToken(GetToken request, CancellationToken cancellationToken = default)
-    {
-        var result = await this.mediator.Send(request, cancellationToken);
-
-        return result;
-    }
-
     [HttpPost(Name = "SendAction")]
-    public async Task<IActionResult> SendAction(Action request, CancellationToken cancellationToken = default)
+    public async Task SendAction(Action request, CancellationToken cancellationToken = default)
     {
         await this.mediator.Send(request, cancellationToken);
-
-        return this.Ok();
     }
 }

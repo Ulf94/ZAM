@@ -1,33 +1,30 @@
 ﻿namespace ZAM.Core.Infrastructure.Tahoma.Services;
 
 using System.Net;
-using System.Net.Http.Json;
 using System.Text;
-using Microsoft.Extensions.Caching.Memory;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using ZAM.Core.Application.Common.Exceptions;
-using ZAM.Core.Application.Tahoma.Models;
 using ZAM.Core.Application.Tahoma.Services;
+using ZAM.Core.Application.Tahoma.ViewModels;
+using ZAM.Core.Infrastructure.Common.Exceptions;
 using ZAM.Core.Infrastructure.Tahoma.Extensions;
 
 internal class TahomaService : ITahomaService
 {
+    private const string COOKIE_NAME = "COOKIE";
     private const string GET_COOKIE_URI = "https://ha101-1.overkiz.com/enduser-mobile-web/enduserAPI/login";
     private const string GET_DEVICES_URI = "https://ha101-1.overkiz.com/enduser-mobile-web/enduserAPI/setup/devices";
     private const string SEND_ACTION_URI = "https://ha101-1.overkiz.com/enduser-mobile-web/enduserAPI/exec/apply";
-    private const string TOKEN_URI = "https://ha101-1.overkiz.com/enduser-mobile-web/enduserAPI/config/0407-2414-8233/local/tokens/generate";
 
-    private readonly IMemoryCache cache;
     private readonly HttpClient client;
     private readonly IConfiguration configuration;
     private readonly ILogger<TahomaService> logger;
 
-    public TahomaService(IConfiguration configuration, IMemoryCache cache, IHttpClientFactory httpClientFactory, ILogger<TahomaService> logger)
+    public TahomaService(IConfiguration configuration, IHttpClientFactory httpClientFactory, ILogger<TahomaService> logger)
     {
         this.configuration = configuration;
-        this.cache = cache;
         this.client = httpClientFactory.CreateClient(TahomaOptions.SectionName);
         this.logger = logger;
     }
@@ -35,27 +32,37 @@ internal class TahomaService : ITahomaService
     public async Task<List<Device>> GetDevices()
     {
         this.logger.LogInformation("Getting devices information");
-        var result = await this.GetAsyncWithCookie(HttpMethod.Get, GET_DEVICES_URI);
+
+        var result = await this.Send(HttpMethod.Get, GET_DEVICES_URI);
 
         var text = await result.Content.ReadAsStringAsync();
 
-        var devices = JsonConvert.DeserializeObject<List<Device>>(text)!;
+        var devices = JsonSerializer.Deserialize<List<Device>>(text)!;
 
         return devices;
     }
 
-    public async Task<string> GetLoginCookie()
+    public Task<string> GetLoginCookie()
     {
-        var userId = this.configuration.GetSection(TahomaOptions.SectionName).Get<TahomaOptions>()!.UserId;
-        var userPassword = this.configuration.GetSection(TahomaOptions.SectionName).Get<TahomaOptions>()!.UserPassword;
+        if (this.client.DefaultRequestHeaders.Contains(COOKIE_NAME))
+        {
+            this.logger.LogInformation("Cookie already fetched");
+
+            var fetchedCookie = this.client.DefaultRequestHeaders.GetValues(COOKIE_NAME).First();
+
+            return Task.FromResult(fetchedCookie);
+        }
+
+        var userId = this.GetCredentials()["userId"];
+        var userPassword = this.GetCredentials()["userPassword"];
+
+        this.logger.LogInformation("Getting cookie with {UserName} and {Password}", userId.ObfuscateCredentials(), userPassword.ObfuscateCredentials());
 
         var httpContent = new FormUrlEncodedContent(new List<KeyValuePair<string, string>>
         {
             new("userId", userId),
             new("userPassword", userPassword),
         });
-
-        this.logger.LogInformation("Getting cookie with {UserName} and {Password}", userId.ObfuscateCredentials(), userPassword.ObfuscateCredentials());
 
         var request = new HttpRequestMessage(HttpMethod.Post, GET_COOKIE_URI)
         {
@@ -75,54 +82,23 @@ internal class TahomaService : ITahomaService
 
         var cookies = response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value.FirstOrDefault();
 
-        var cookieValue = cookies!.GetCookieValue();
+        var cookieValue = cookies!.ExtractCookieValue();
 
-        this.cache.Set("cookieValue", cookieValue);
+        this.client.DefaultRequestHeaders.Add("Cookie", $"JSESSIONID={cookieValue}");
 
         this.logger.LogInformation("Cookie fetched");
 
-        return cookieValue;
+        return Task.FromResult(cookieValue);
     }
 
-    public async Task<Token> GetToken()
-    {
-        this.logger.LogInformation("Requesting for a token");
-
-        var tokenExists = this.cache.TryGetValue("token", out Token? token);
-
-        if (tokenExists)
-        {
-            this.logger.LogInformation("Cached token is {Token}", token);
-
-            return token!;
-        }
-
-        var result = await this.GetAsyncWithCookie(HttpMethod.Get, TOKEN_URI);
-
-        if (result.StatusCode is not HttpStatusCode.OK)
-        {
-            this.logger.LogError("Token was not fetched");
-
-            throw new TokenNotFetchedException();
-        }
-
-        token = await result.Content.ReadFromJsonAsync<Token>();
-
-        this.cache.Set("token", token);
-
-        this.logger.LogInformation("Token fetched");
-
-        return token!;
-    }
-
-    public async void SendAction(string label, string command, string deviceUrl)
+    public void SendAction(string label, string command, string deviceUrl)
     {
         this.logger.LogInformation("Sending action {Command} to {Label}", command, label);
 
         var action = new SendAction()
         {
             Label = label,
-            Action = new List<ActionModel>
+            Actions = new List<ActionModel>
             {
                 new()
                 {
@@ -130,59 +106,57 @@ internal class TahomaService : ITahomaService
                     {
                         new()
                         {
-                            Names =
-                            {
-                                command,
-                            },
+                            Name = command,
                         },
                     },
-                    Url = deviceUrl,
+                    DeviceURL = deviceUrl,
                 },
             },
         };
 
-        var cookieExists = this.cache.TryGetValue("cookieValue", out var cookie);
+        var json = JsonSerializer.Serialize(action);
 
-        if (cookieExists is false)
-        {
-            this.logger.LogError("Reading cookie value from cache failed");
-
-            throw new CookieNotFoundException("");
-        }
-
-        var request = new HttpRequestMessage(HttpMethod.Post, SEND_ACTION_URI)
-        {
-            Content = JsonContent.Create(action),
-        };
-
-        request.Headers.Add("Cookie", $"JSESSIONID={cookie}");
-
-        var result = await this.client.SendAsync(request);
-
-        result.EnsureSuccessStatusCode();
-
-        this.logger.LogInformation("Request to succeeded");
+        _ = this.Send(HttpMethod.Post, SEND_ACTION_URI, json);
     }
 
-    private async Task<HttpResponseMessage> GetAsyncWithCookie(HttpMethod httpMethod, string url)
+    private Dictionary<string, string> GetCredentials()
+    {
+        var userId = this.configuration.GetSection(TahomaOptions.SectionName).Get<TahomaOptions>()?.UserId;
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            userId = Environment.GetEnvironmentVariable("CONFIG_TAHOMA__USERID", EnvironmentVariableTarget.Machine);
+        }
+
+        var userPassword = this.configuration.GetSection(TahomaOptions.SectionName).Get<TahomaOptions>()?.UserPassword;
+
+        if (string.IsNullOrWhiteSpace(userPassword))
+        {
+            userPassword = Environment.GetEnvironmentVariable("CONFIG_TAHOMA__USERPASSWORD", EnvironmentVariableTarget.Machine);
+        }
+
+        if (userId is null || userPassword is null)
+        {
+            throw new CredentialsNotFoundExceptions();
+        }
+
+        var credentials = new Dictionary<string, string>
+        {
+            { "userId", userId },
+            { "userPassword", userPassword },
+        };
+
+        return credentials;
+    }
+
+    private Task<HttpResponseMessage> Send(HttpMethod httpMethod, string url, string content = "")
     {
         this.logger.LogInformation("Sending request with a cookie to an {Url}", url);
 
         var request = new HttpRequestMessage(httpMethod, url)
         {
-            Content = new StringContent("", Encoding.UTF8, "application/json"),
+            Content = new StringContent(content, Encoding.UTF8, "application/json"),
         };
-
-        var cookieExists = this.cache.TryGetValue("cookieValue", out var cookie);
-
-        if (cookieExists is false)
-        {
-            this.logger.LogError("Reading cookie value from cache failed");
-
-            throw new CookieNotFoundException(url);
-        }
-
-        request.Headers.Add("Cookie", $"JSESSIONID={cookie}");
 
         var result = this.client.Send(request);
 
@@ -190,6 +164,6 @@ internal class TahomaService : ITahomaService
 
         this.logger.LogInformation("Request to {url} succeeded", url);
 
-        return result;
+        return Task.FromResult(result);
     }
 }

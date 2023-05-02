@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ZAM.Core.Application.Tahoma.Models;
+using ZAM.Core.Application.Tahoma.ViewModels;
 
 [TestClass]
 public sealed class AttributeTests

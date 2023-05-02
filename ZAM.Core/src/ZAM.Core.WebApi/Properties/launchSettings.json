@@ -4,8 +4,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5080",
-      "sslPort": 5443
+      "applicationUrl": "http://localhost:5081",
+      "sslPort": 5444
     }
   },
   "profiles": {
@@ -16,9 +16,7 @@
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:5444;http://localhost:5081",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "CONFIG_SERILOG__WRITETO__1__NAME": "Seq",
-        "CONFIG_SERILOG__WRITETO__1__ARGS__SERVERURL": "https://seq.zammichalszura.xyz"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "IIS Express": {

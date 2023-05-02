@@ -4,6 +4,7 @@ internal sealed class TahomaOptions
 {
     public static readonly string SectionName = "Tahoma";
     public Uri BaseAddress { get; set; } = new Uri("about:blank");
+    public string CredentialsPath { get; init; } = string.Empty;
     public int RetryCount { get; set; } = 3;
     public int RetrySleepDurationInMiliseconds { get; set; } = 5000;
     public int TimeoutInMiliseconds { get; set; } = 30000;

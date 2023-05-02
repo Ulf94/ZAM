@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using ZAM.Core.Application.Tahoma.Models;
+using ZAM.Core.Application.Tahoma.ViewModels;
 
 [TestClass]
 public sealed class SerializationTests
@@ -206,7 +206,7 @@ public sealed class SerializationTests
                         {
                             ""name"": ""internal:LightingLedPodModeState"",
                             ""type"": 2,
-                            ""value"": 1
+                            ""value"": ""1""
                         },
                         {
                             ""name"": ""core:LocalIPv4AddressState"",

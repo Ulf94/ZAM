@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="ZAM.Core.Infrastructure.UnitTests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MassTransit" Version="8.0.14" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.14" />
     <PackageReference Include="MediatR" Version="12.0.1" />
@@ -27,6 +31,10 @@
   <ItemGroup>
     <ProjectReference Include="..\ZAM.Core.Application\ZAM.Core.Application.csproj" />
     <ProjectReference Include="..\ZAM.Shared\ZAM.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Tahoma\Exceptions\" />
   </ItemGroup>
 
 </Project>

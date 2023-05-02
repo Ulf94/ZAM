@@ -2,7 +2,7 @@
 
 internal static class TahomaExtensions
 {
-    internal static string GetCookieValue(this string cookies)
+    internal static string ExtractCookieValue(this string cookies)
     {
         var cookiesStrings = cookies!.Split(";");
 
