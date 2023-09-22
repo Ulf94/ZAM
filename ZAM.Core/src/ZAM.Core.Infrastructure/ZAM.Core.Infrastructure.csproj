@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Tahoma\Exceptions\**" />
+    <EmbeddedResource Remove="Tahoma\Exceptions\**" />
+    <None Remove="Tahoma\Exceptions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="MediatR" />
   </ItemGroup>
 
@@ -31,10 +37,6 @@
   <ItemGroup>
     <ProjectReference Include="..\ZAM.Core.Application\ZAM.Core.Application.csproj" />
     <ProjectReference Include="..\ZAM.Shared\ZAM.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Tahoma\Exceptions\" />
   </ItemGroup>
 
 </Project>

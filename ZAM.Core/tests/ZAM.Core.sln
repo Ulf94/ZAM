@@ -3,25 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZAM.Core.Infrastructure.UnitTests", "ZAM.Core.Infrastructure.UnitTests\ZAM.Core.Infrastructure.UnitTests.csproj", "{DD54CC61-9C22-43A6-AF33-AD04E1839C0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZAM.Core.Infrastructure.UnitTests", "ZAM.Core.Infrastructure.UnitTests\ZAM.Core.Infrastructure.UnitTests.csproj", "{DD54CC61-9C22-43A6-AF33-AD04E1839C0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZAM.Core.Application.UnitTests", "ZAM.Core.Application.UnitTests\ZAM.Core.Application.UnitTests.csproj", "{A3512EF0-2D4F-46C2-835A-51D6605FE64B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZAM.Core.Application.UnitTests", "ZAM.Core.Application.UnitTests\ZAM.Core.Application.UnitTests.csproj", "{A3512EF0-2D4F-46C2-835A-51D6605FE64B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZAM.Core.Application", "..\src\ZAM.Core.Application\ZAM.Core.Application.csproj", "{1264EE1C-A5DD-4439-AA50-F5B26BAAA10A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZAM.Core.Application", "..\src\ZAM.Core.Application\ZAM.Core.Application.csproj", "{1264EE1C-A5DD-4439-AA50-F5B26BAAA10A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZAM.Core.Domain", "..\src\ZAM.Core.Domain\ZAM.Core.Domain.csproj", "{614CEE1D-98EB-4887-A6C3-D943843E95D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZAM.Core.Domain", "..\src\ZAM.Core.Domain\ZAM.Core.Domain.csproj", "{614CEE1D-98EB-4887-A6C3-D943843E95D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZAM.Core.Infrastructure", "..\src\ZAM.Core.Infrastructure\ZAM.Core.Infrastructure.csproj", "{D6498AF7-AA27-407E-B535-05CDF8EDFC12}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZAM.Core.Infrastructure", "..\src\ZAM.Core.Infrastructure\ZAM.Core.Infrastructure.csproj", "{D6498AF7-AA27-407E-B535-05CDF8EDFC12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZAM.Core.WebApi", "..\src\ZAM.Core.WebApi\ZAM.Core.WebApi.csproj", "{085C9F3B-63E8-44BD-946F-2E819BA0FBC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZAM.Core.WebApi", "..\src\ZAM.Core.WebApi\ZAM.Core.WebApi.csproj", "{085C9F3B-63E8-44BD-946F-2E819BA0FBC6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZAM.Shared", "..\src\ZAM.Shared\ZAM.Shared.csproj", "{AD28E592-FA68-4FB9-BEA6-5BB413DB0FDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DD54CC61-9C22-43A6-AF33-AD04E1839C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -48,5 +47,12 @@ Global
 		{085C9F3B-63E8-44BD-946F-2E819BA0FBC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{085C9F3B-63E8-44BD-946F-2E819BA0FBC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{085C9F3B-63E8-44BD-946F-2E819BA0FBC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD28E592-FA68-4FB9-BEA6-5BB413DB0FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD28E592-FA68-4FB9-BEA6-5BB413DB0FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD28E592-FA68-4FB9-BEA6-5BB413DB0FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD28E592-FA68-4FB9-BEA6-5BB413DB0FDA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

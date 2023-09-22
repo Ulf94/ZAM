@@ -1,8 +1,8 @@
 ﻿namespace ZAM.Core.WebApi.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using ZAM.Core.Application.Tahoma.Commands;
-using ZAM.Core.Application.Tahoma.ViewModels;
+using Application.Tahoma.Commands;
+using Application.Tahoma.ViewModels;
 
 [ApiController]
 [Route("[controller]/[action]")]
@@ -14,7 +14,7 @@ public class TahomaController : ControllerBase
         => (this.mediator) = (mediator);
 
     [HttpPost(Name = "GetDevices")]
-    public async Task<List<Device>> GetDevices(CancellationToken cancellationToken = default)
+    public async Task<Dictionary<string, List<Device>>> GetDevices(CancellationToken cancellationToken = default)
     {
         var request = new GetDevices();
         var result = await this.mediator.Send(request, cancellationToken);
@@ -22,7 +22,7 @@ public class TahomaController : ControllerBase
         return result;
     }
 
-    [HttpPost(Name = "GetLoginCookies")]
+    [HttpPost(Name = "GetLoginCookie")]
     public async Task<string> GetLoginCookies(GetLoginCookie request, CancellationToken cancellationToken = default)
     {
         var result = await this.mediator.Send(request, cancellationToken);

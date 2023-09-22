@@ -2,7 +2,7 @@
 
 using global::MassTransit;
 using Microsoft.Extensions.Logging;
-using ZAM.Core.Application;
+using Application;
 
 public sealed class PiService : IPiService
 {
@@ -17,7 +17,7 @@ public sealed class PiService : IPiService
     {
         this.logger.LogInformation("Publishing message to get room's {roomNumber} temperature", roomNumber);
 
-        var message = new ZAM.Shared.Interfaces.GetRoomTemperature
+        var message = new Shared.Interfaces.GetRoomTemperature
         {
             RoomNumber = roomNumber,
         };

@@ -3,7 +3,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ZAM.Core.Application.Tahoma.Services;
-using ZAM.Core.Infrastructure.Tahoma.Services;
+using Services;
 
 internal static class DependencyInjection
 {
@@ -17,9 +17,7 @@ internal static class DependencyInjection
         services.AddMemoryCache();
 
         services.AddSingleton<ITahomaService, TahomaService>();
-
-        var serviceProvider = services.BuildServiceProvider();
-        var tahomaService = serviceProvider.GetRequiredService<ITahomaService>();
+        services.AddTransient<ICredentialsProvider, TahomaCredentialsProvider>();
 
         return services;
     }

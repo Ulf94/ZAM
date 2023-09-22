@@ -1,8 +1,8 @@
 ﻿namespace ZAM.Core.Application.Tahoma.QueryHandlers;
 
 using Microsoft.Extensions.Logging;
-using ZAM.Core.Application.Tahoma.Commands;
-using ZAM.Core.Application.Tahoma.Services;
+using Commands;
+using Services;
 
 internal sealed class GetLoginCookieHandler : IRequestHandler<GetLoginCookie, string>
 {

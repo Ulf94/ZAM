@@ -1,0 +1,18 @@
+<h1>Control your Tahoma devices</h1>
+
+<div class="devicesForm">
+    <select name="devicesDropdown" id="devicesDropdown" (change)="refreshActionsForDevice()" [(ngModel)]="selectedDevice">
+        <option  [defaultSelected]="" value="undefined">Select device...</option>
+        <option *ngFor="let device of devices" [value] = "device" >
+            {{device.label}}
+        </option>
+    </select>
+
+    <select name="actionsDropdown" id="actionsDropdown" >
+        <option value="undefined">Select action...</option>
+        <option *ngFor="let action of actions" [value] = "action">
+            {{action}}
+        </option>
+    </select>
+
+</div>

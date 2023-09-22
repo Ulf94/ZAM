@@ -1,7 +1,7 @@
 ﻿namespace ZAM.Core.Application.Tahoma.CommandHandlers;
 
 using Microsoft.Extensions.Logging;
-using ZAM.Core.Application.Tahoma.Services;
+using Services;
 
 internal sealed class ActionHandler : IRequestHandler<Commands.Action>
 {
@@ -15,7 +15,7 @@ internal sealed class ActionHandler : IRequestHandler<Commands.Action>
     {
         this.logger.LogInformation("{HandlerName} started", nameof(ActionHandler));
 
-        this.tahomaService.SendAction(request.Label, request.Command, request.DeviceUrl);
+        this.tahomaService.SendTahomaAction(request.Label, request.Command, request.DeviceUrl);
 
         return Task.CompletedTask;
     }

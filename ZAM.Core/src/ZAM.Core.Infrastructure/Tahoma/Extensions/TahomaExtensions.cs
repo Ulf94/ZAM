@@ -1,6 +1,6 @@
 ﻿namespace ZAM.Core.Infrastructure.Tahoma.Extensions;
 
-internal static class TahomaExtensions
+internal static class Extensions
 {
     internal static string ExtractCookieValue(this string cookies)
     {

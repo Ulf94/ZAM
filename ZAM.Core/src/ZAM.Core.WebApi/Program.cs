@@ -1,8 +1,8 @@
 namespace ZAM.Core.WebApi;
 
 using Serilog;
-using ZAM.Core.Application;
-using ZAM.Core.Infrastructure;
+using Application;
+using Infrastructure;
 
 internal class Program
 {
@@ -10,7 +10,7 @@ internal class Program
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json")
-            .AddEnvironmentVariables(prefix: "CONFIG_")
+            .AddEnvironmentVariables("CONFIG_")
             .Build();
 
         Log.Logger = new LoggerConfiguration()

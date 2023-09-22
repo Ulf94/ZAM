@@ -5,8 +5,8 @@ using System.Security.Authentication;
 using global::MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ZAM.Core.Application;
-using ZAM.Core.Infrastructure.MassTransit.Services;
+using Application;
+using Services;
 
 internal static class DependencyInjection
 {

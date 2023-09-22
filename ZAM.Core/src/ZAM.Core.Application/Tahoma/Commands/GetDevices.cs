@@ -1,7 +1,7 @@
 ﻿namespace ZAM.Core.Application.Tahoma.Commands;
 
-using ZAM.Core.Application.Tahoma.ViewModels;
+using ViewModels;
 
-public sealed record GetDevices : IRequest<List<Device>>
+public sealed record GetDevices : IRequest<Dictionary<string, List<Device>>>
 {
 }

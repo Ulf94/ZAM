@@ -1,7 +1,7 @@
 ﻿namespace ZAM.Core.WebApi.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-using ZAM.Core.Application.PI.Queries;
+using Application.PI.Queries;
 
 [ApiController]
 [Route("[controller]/[action]")]

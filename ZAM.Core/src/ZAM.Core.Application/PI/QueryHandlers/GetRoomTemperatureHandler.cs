@@ -2,7 +2,7 @@
 
 using MassTransit;
 using Microsoft.Extensions.Logging;
-using ZAM.Core.Application.PI.Queries;
+using Queries;
 
 internal sealed class GetLoginHandler : IRequestHandler<GetRoomTemperature>
 {

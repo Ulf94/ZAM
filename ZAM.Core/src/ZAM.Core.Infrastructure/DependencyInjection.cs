@@ -3,8 +3,8 @@
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ZAM.Core.Infrastructure.MassTransit;
-using ZAM.Core.Infrastructure.Tahoma;
+using MassTransit;
+using Tahoma;
 
 public static class DependencyInjection
 {
