@@ -3,6 +3,7 @@ namespace ZAM.Core.WebApi;
 using Serilog;
 using Application;
 using Infrastructure;
+using Hangfire;
 
 internal class Program
 {
@@ -35,6 +36,8 @@ internal class Program
 
         app.UseSwagger();
         app.UseSwaggerUI();
+
+        app.UseHangfireDashboard("/hangfire");
 
         app.UseAuthorization();
 

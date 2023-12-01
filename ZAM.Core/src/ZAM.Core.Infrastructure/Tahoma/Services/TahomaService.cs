@@ -1,5 +1,7 @@
 ﻿namespace ZAM.Core.Infrastructure.Tahoma.Services;
 
+using global::Hangfire;
+using Hangfire;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text;
@@ -14,6 +16,7 @@ using ZAM.Core.Infrastructure.Tahoma.Extensions;
 internal class TahomaService : ITahomaService
 {
     private const string COOKIE_NAME = "Set-Cookie";
+
     private readonly HttpClient httpClient;
     private readonly ILogger<TahomaService> logger;
     private readonly ICredentialsProvider credentialsProvider;
@@ -47,11 +50,8 @@ internal class TahomaService : ITahomaService
         this.logger.LogInformation("Getting cookie with {UserName} and {Password}", credentials.UserId.ObfuscateCredentials(), credentials.UserPassword.ObfuscateCredentials());
 
         FormUrlEncodedContent httpContent = PrepareHttpContent(credentials);
-
         HttpRequestMessage request = PrepareHttpReqest(httpContent);
-
         var response = this.httpClient.Send(request);
-
         response.EnsureSuccessStatusCode();
 
         if (response.StatusCode is not HttpStatusCode.OK)
@@ -62,9 +62,7 @@ internal class TahomaService : ITahomaService
         }
 
         var cookies = response.Headers.SingleOrDefault(header => header.Key == COOKIE_NAME).Value.FirstOrDefault();
-
         var cookieValue = cookies!.ExtractCookieValue();
-
         AddCookieToTheHttpClient(cookieValue);
 
         this.logger.LogInformation("Cookie fetched");

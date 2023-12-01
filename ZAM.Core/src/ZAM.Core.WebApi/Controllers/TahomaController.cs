@@ -35,4 +35,11 @@ public class TahomaController : ControllerBase
     {
         await this.mediator.Send(request, cancellationToken);
     }
+
+    [HttpPost(Name = "ScheduleAction")]
+    public async Task ScheduleAction(RepeatedAction request, CancellationToken cancellationToken = default)
+    {
+
+        await this.mediator.Send(request, cancellationToken);
+    }
 }

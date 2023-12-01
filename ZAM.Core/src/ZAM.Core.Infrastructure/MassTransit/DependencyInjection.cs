@@ -5,8 +5,6 @@ using System.Security.Authentication;
 using global::MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Application;
-using Services;
 
 internal static class DependencyInjection
 {
@@ -38,8 +36,6 @@ internal static class DependencyInjection
                 configurator.ConfigureEndpoints(context);
             });
         });
-
-        services.AddScoped<IPiService, PiService>();
 
         return services;
     }
